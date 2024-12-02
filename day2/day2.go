@@ -39,7 +39,7 @@ func problemDampener(a []int64) bool {
 	return false
 }
 
-func is_safe(a []int64) bool {
+func isSafe(a []int64) bool {
 	var isInOrder func(a, b int64) bool
 	if isAsc(a[0], a[1]) {
 		isInOrder = isAsc
