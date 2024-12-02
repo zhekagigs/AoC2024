@@ -6,6 +6,7 @@ import (
 	"os"
 	"slices"
 	"strconv"
+	"strings"
 )
 
 type Set map[int64]struct{}
@@ -53,6 +54,20 @@ func Toint64(num string) int64 {
 	return int64(i)
 }
 
+func RemoveIndex(s []int64, i int) []int64 {
+    return append(s[:i], s[i+1:]...)
+}
+
+func ToIntArr(text string) []int64{
+	var result []int64
+	nums := strings.Split(text, " ")
+	for _, num := range nums {
+		result = append(result, Toint64(num))
+	}
+	return result
+
+}
+
 func SortAscending(nums []int64) []int64 {
 	slices.Sort(nums)
 	return nums
@@ -80,3 +95,4 @@ func GetSmallest(a, b int) int {
 		return b
 	}
 }
+
