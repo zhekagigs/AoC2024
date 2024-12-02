@@ -117,7 +117,7 @@ func Test_problem_dampener(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := problem_dampener(tt.a); got != tt.want {
+			if got := problemDampener(tt.a); got != tt.want {
 				t.Errorf("problem_dampener() = %v, want %v", got, tt.want)
 			}
 		})

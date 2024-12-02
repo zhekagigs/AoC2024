@@ -21,33 +21,33 @@ func calcSafeReports(lines []string) int {
 	total_safe_reports := 0
 	for _, line := range lines {
 		report := pkg.ToIntArr(line)
-		if is_safe(report) || problem_dampener(report) {
+		if is_safe(report) || problemDampener(report) {
 			total_safe_reports += 1
-		} 
+		}
 	}
 	return total_safe_reports
 }
 
-func problem_dampener(a []int64) bool {
-    for i := 0; i < len(a); i++ {
-        temp := make([]int64, len(a))
-        copy(temp, a)
-        if is_safe(pkg.RemoveIndex(temp, i)) {
-            return true
-        }
-    }
-    return false
+func problemDampener(a []int64) bool {
+	for i := 0; i < len(a); i++ {
+		temp := make([]int64, len(a))
+		copy(temp, a)
+		if is_safe(pkg.RemoveIndex(temp, i)) {
+			return true
+		}
+	}
+	return false
 }
 
 func is_safe(a []int64) bool {
-	var order_func func(a, b int64) bool
-	if a[0] < a[1] {
-		order_func = is_asc
+	var isInOrder func(a, b int64) bool
+	if isAsc(a[0], a[1]) {
+		isInOrder = isAsc
 	} else {
-		order_func = is_desc
+		isInOrder = isDesc
 	}
 	for i := 0; i < len(a)-1; i++ {
-		if is_in_limit(a[i], a[i+1]) && order_func(a[i], a[i+1]) {
+		if isInLimit(a[i], a[i+1]) && isInOrder(a[i], a[i+1]) {
 			continue
 		} else {
 			return false
@@ -56,14 +56,14 @@ func is_safe(a []int64) bool {
 	return true
 }
 
-func is_in_limit(a, b int64) bool {
+func isInLimit(a, b int64) bool {
 	return pkg.Abs(a-b) <= 3
 }
 
-func is_asc(a, b int64) bool {
+func isAsc(a, b int64) bool {
 	return a < b
 }
 
-func is_desc(a, b int64) bool {
+func isDesc(a, b int64) bool {
 	return a > b
 }
