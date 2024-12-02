@@ -21,11 +21,9 @@ func calcSafeReports(lines []string) int {
 	total_safe_reports := 0
 	for _, line := range lines {
 		report := pkg.ToIntArr(line)
-		if is_safe(report) {
+		if is_safe(report) || problem_dampener(report) {
 			total_safe_reports += 1
-		} else if problem_dampener(report) {
-			total_safe_reports += 1
-		}
+		} 
 	}
 	return total_safe_reports
 }
