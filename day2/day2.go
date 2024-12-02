@@ -21,7 +21,7 @@ func calcSafeReports(lines []string) int {
 	total_safe_reports := 0
 	for _, line := range lines {
 		report := pkg.ToIntArr(line)
-		if is_safe(report) || problemDampener(report) {
+		if isSafe(report) || problemDampener(report) {
 			total_safe_reports += 1
 		}
 	}
@@ -32,7 +32,7 @@ func problemDampener(a []int64) bool {
 	for i := 0; i < len(a); i++ {
 		temp := make([]int64, len(a))
 		copy(temp, a)
-		if is_safe(pkg.RemoveIndex(temp, i)) {
+		if isSafe(pkg.RemoveIndex(temp, i)) {
 			return true
 		}
 	}
