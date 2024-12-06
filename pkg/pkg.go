@@ -2,6 +2,7 @@ package pkg
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"os"
 	"slices"
@@ -42,6 +43,14 @@ func ReadFile(fp string) ([]string, error) {
 	return text, nil
 }
 
+func GetLinesFromArgFile() []string {
+	flag.Parse()
+	fp := flag.Arg(0)
+	lines, err := ReadFile(fp)
+	Check(err)
+	return lines
+}
+
 func Check(err error) {
 	if err != nil {
 		panic(err)
@@ -52,6 +61,12 @@ func Toint64(num string) int64 {
 	i, err := strconv.ParseInt(num, 10, 32)
 	Check(err)
 	return int64(i)
+}
+
+func ToInt(num string) int {
+	i, err := strconv.ParseInt(num, 10, 32)
+	Check(err)
+	return int(i)
 }
 
 func RemoveIndex(s []int64, i int) []int64 {

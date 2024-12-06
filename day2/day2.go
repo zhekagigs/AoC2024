@@ -2,17 +2,13 @@ package main
 
 import (
 	"AoC2024/pkg"
-	"flag"
 	"fmt"
 )
 
 const MAX_DIFF = 3
 
 func main() {
-	flag.Parse()
-	fp := flag.Arg(0)
-	lines, err := pkg.ReadFile(fp)
-	pkg.Check(err)
+	lines := pkg.GetLinesFromArgFile()
 	total_safe_reports := calcSafeReports(lines)
 	fmt.Println("total safe reports: ", total_safe_reports)
 }

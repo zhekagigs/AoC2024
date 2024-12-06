@@ -95,7 +95,7 @@ func Test_is_safe(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := is_safe(tt.a); got != tt.want {
+			if got := isSafe(tt.a); got != tt.want {
 				t.Errorf("is_safe() = %v, want %v", got, tt.want)
 			}
 		})
