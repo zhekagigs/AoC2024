@@ -2,7 +2,6 @@ package main
 
 import (
 	"AoC2024/pkg"
-	// "bytes"
 	"fmt"
 	"regexp"
 	"strings"
@@ -12,46 +11,52 @@ import (
 func main() {
 	lines := pkg.GetLinesFromArgFile()
 	blob := strings.Join(lines, "")
-	// reMul := regexp.MustCompile(`mul\([0-9]+,[0-9]+\)`)
-	// reDo := regexp.MustCompile(`do()`)
-	// reDont := regexp.MustCompile(`don't()`)
-	// matchDo := reDo.FindAllIndex([]byte(blob), -1)
-	// matchDont := reDont.FindAllIndex([]byte(blob), -1)
-	// matches := reMul.FindAllIndex([]byte(blob), -1)
-	totalSum := 0
+	totalSum := getAnswer(blob)
+	// totalSum += getAnswerDo(blob)
+	fmt.Println("total sum:", totalSum) // total sum must be : 174561379
+}
 
+func getAnswer(blob string) int {
+	var totalSum int
 	reMul := regexp.MustCompile(`mul\([0-9]+,[0-9]+\)`)
-	counter := 0
 	for i := 0; i < len(blob); i++ {
-		if i+7 < len(blob) && string(blob[i:i+4]) == "mul(" {
-			if points := reMul.FindIndex([]byte(blob[i:])); points != nil {
-				// Adjust points for the offset
-				absPoints := []int{points[0] + i, points[1] + i}
-				// fmt.Printf("i: [%v], points: [%v]\n", i, absPoints)
-				tempsum := addToTotal(absPoints, blob, totalSum)
-				totalSum += tempsum 
-				fmt.Println(tempsum, totalSum)
-				counter++
-				if totalSum > 174561379 {
-					fmt.Println(i, len(blob), counter, "the end")
-					break
-				}
+		if i+4 < len(blob) && string(blob[i:i+4]) == "mul(" {
+			if points := reMul.FindIndex([]byte(blob[i:])); points != nil && points[0] == 0 {
+				absPoints := []int{i + points[0], i + points[1]}
+				left := absPoints[0]
+				right := absPoints[1]
+				line := blob[left:right]
+
+				partSum := ParseMul(line)
+				totalSum += partSum
+				// i += points[1] - 1  // without this totat is: 186843163
 			}
 		}
 	}
-		fmt.Println("total sum:", totalSum) // total sum: 174561379
-	}
-
-func addToTotal(points []int, blob string, totalSum int) int {
-	left := points[0]
-	right := points[1]
-	line := blob[left:right]
-	fmt.Println( string(line))
-	partSum := ParseMul(line)
-	totalSum += partSum
-	// fmt.Println(line, partSum, totalSum)
 	return totalSum
 }
+
+
+func getAnswerDo(blob string) int {
+	var totalSum int
+	reMul := regexp.MustCompile(`mul\([0-9]+,[0-9]+\)`)
+	for i := 0; i < len(blob); i++ {
+		if i+4 < len(blob) && string(blob[i:i+4]) == "mul(" {
+			if points := reMul.FindIndex([]byte(blob[i:])); points != nil && points[0] == 0 {
+				absPoints := []int{i + points[0], i + points[1]}
+				left := absPoints[0]
+				right := absPoints[1]
+				line := blob[left:right]
+
+				partSum := ParseMul(line)
+				totalSum += partSum
+				// i += points[1] - 1  // without this totat is: 186843163
+			}
+		}
+	}
+	return totalSum
+}
+
 // parses top level
 func ParseMul(line string) int {
 	var mc = &MulCount{
