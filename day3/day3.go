@@ -11,8 +11,8 @@ import (
 func main() {
 	lines := pkg.GetLinesFromArgFile()
 	blob := strings.Join(lines, "")
-	totalSum := getAnswer(blob)
-	// totalSum += getAnswerDo(blob)
+	// totalSum := getAnswer(blob)
+	totalSum := getAnswerDo(blob)
 	fmt.Println("total sum:", totalSum) // total sum must be : 174561379
 }
 
@@ -40,8 +40,19 @@ func getAnswer(blob string) int {
 func getAnswerDo(blob string) int {
 	var totalSum int
 	reMul := regexp.MustCompile(`mul\([0-9]+,[0-9]+\)`)
+	var do = true
 	for i := 0; i < len(blob); i++ {
-		if i+4 < len(blob) && string(blob[i:i+4]) == "mul(" {
+		if i+4 < len(blob) && string(blob[i:i+4]) == "do()" {
+			do = true
+			i += 3
+			continue
+		}
+		if i+7 < len(blob) && string(blob[i:i+7]) == "don't()" {
+			do = false
+			i += 6
+			continue
+		}
+		if do && i+4 < len(blob) && string(blob[i:i+4]) == "mul(" {
 			if points := reMul.FindIndex([]byte(blob[i:])); points != nil && points[0] == 0 {
 				absPoints := []int{i + points[0], i + points[1]}
 				left := absPoints[0]
@@ -50,7 +61,7 @@ func getAnswerDo(blob string) int {
 
 				partSum := ParseMul(line)
 				totalSum += partSum
-				// i += points[1] - 1  // without this totat is: 186843163
+				i += points[1] - 1  
 			}
 		}
 	}

@@ -57,3 +57,30 @@ func Test_main(t *testing.T) {
 		})
 	}
 }
+
+func Test_getAnswerDo(t *testing.T) {
+	type args struct {
+		line string
+	}
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		// TODO: Add test cases.
+		{
+			name: "double with noise",
+			args: args{
+				line: "xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?do()mul(8,5))",
+			},
+			want: 88,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := getAnswerDo(tt.args.line); got != tt.want {
+				t.Errorf("getAnswerDo() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
