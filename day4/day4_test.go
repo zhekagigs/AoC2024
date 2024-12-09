@@ -45,7 +45,6 @@ func TestGetAnswer_XMASVert(t *testing.T) {
 	}
 }
 
-
 func TestGetAnswer_XMASVert2(t *testing.T) {
 	lines := []string{
 		"XX",
@@ -141,14 +140,24 @@ func TestGetAnswer2_small(t *testing.T) {
 		"MXM",
 		"XAX",
 		"SXS",
-		
 	}
 	result := getAnswer2(lines)
 	if result != 1 {
 		t.Errorf("Expected 1 for MAS in x shape, got %d", result)
 	}
 }
-
+func TestGetAnswer2_big(t *testing.T) {
+	lines := []string{
+		"SMMSSSSXSMMXSXMMSASXSMSMXMXMMMSASXMASXMMMSSMMXMSMXAAMSAMXMSAXSXMMAMXXAXXAAMAXSMSAMXSXXXXXXMXSXAXSXXSSSMAXMMSMMMSMSAMXSAMXMAMSXSASMXXAMXMXSSX",
+		"XAAAAAAASASAMXSAMXMAMAAXAMMSAXSAMAMASXMASAAAMMMMMSAMXMAXAMMMMXASMXMSMSMMMSMSXMASXMASXMSSSXAASXMASMMSASMMSMAAAAAMMXMXSMASMSSXAAMAXAAMMSXSAMXM",
+		"SMMSMMMMSAMAMAMASAMXMXMMMSAMMMMAMMMAMXSXMXMMMAAAMAMXSXSSXSAAASMMMMAAAAXAAAXMAMAMXMASAXAAXMMAMAXAMAMMAMXAAMSSSMSSMAMSXMAMMAMMMSMMMSMSAAMMAMSA",
+	}
+	result := getAnswer2(lines)
+	if result != 1 {
+		t.Errorf("Expected 1 for MAS in x shape, got %d", result)
+	}
+	t.Log(result)
+}
 func TestGetAnswer_BorderXMASsmall(t *testing.T) {
 	lines := []string{
 		"MMMSXXMASM",
