@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-const XMAS = "XMAS"
+var XMAS string = "MAS"
 
 type Word struct {
 	origin      string
@@ -39,11 +39,86 @@ func (w *Word) Reset() {
 func main() {
 	lines := pkg.GetLinesFromArgFile()
 	totalSum := getAnswer(lines)
-	fmt.Println("total sum:", totalSum) // total sum must be : 174561379
+	totalSum2 := getAnswer2(lines)
+	fmt.Println("total sum:", totalSum)  // total sum must be : 174561379
+	fmt.Println("total sum:", totalSum2) // total sum must be : 174561379
+}
+
+func getAnswer2(lines []string) int {
+	var totalSum int
+	// XMAS = "MAS"
+	//M.S
+	//.A.
+	//M.S
+	b := NewBoard(lines)
+	if b == nil {
+		return 0
+	}
+	for y := range b.board {
+		for x, value := range b.board[y] {
+			b.cursor.x, b.cursor.y = x, y
+			if value == 'M' {
+				// m   s
+				//   a
+				// m   s
+				fmt.Println("M is at ", x, y)
+				if tryDirection2(b.moveCursorDownRight, b, x, y) {
+					fmt.Println("downRight !")
+					b.cursor.y += 2
+					if tryDirection2(b.moveCursorUpRight, b, x, y+2) {
+						fmt.Println("\tupRight 2 lines down")
+						totalSum++
+					}
+				}
+				resetCurWordState(b, x, y)
+				// m   m
+				//   a
+				// s   s
+				if tryDirection2(b.moveCursorDownRight, b, x, y) {
+					fmt.Println("downRight !")
+					b.cursor.x += 2
+					if tryDirection2(b.moveCursorDownLeft, b, x+2, y) {
+						fmt.Println("\tdownLeft 2 positions right")
+						totalSum++
+					}
+				}
+				resetCurWordState(b, x, y)
+
+				//s   s
+				//  a
+				//m   m
+				if tryDirection2(b.moveCursorUpRight, b, x, y) {
+					fmt.Println("upRight !")
+					b.cursor.x += 2
+					if tryDirection2(b.moveCursorUpLeft, b, x+2, y) {
+						fmt.Println("\tupLeft 2 positions left")
+						totalSum++
+					}
+				}
+				resetCurWordState(b, x, y)
+
+				// s   m
+				//   a
+				// s   m
+				if tryDirection2(b.moveCursorDownLeft, b, x, y) {
+					fmt.Println("downLeft !")
+
+					b.cursor.y += 2
+					if tryDirection2(b.moveCursorUpLeft, b, x, y+2) {
+						totalSum++
+					}
+				}
+				resetCurWordState(b, x, y)
+
+			}
+		}
+	}
+	return totalSum
 }
 
 func getAnswer(lines []string) int {
 	var totalSum int
+	XMAS = "XMAS"
 	b := NewBoard(lines)
 	if b == nil {
 		return 0
@@ -67,14 +142,20 @@ func getAnswer(lines []string) int {
 }
 
 func tryDirection(move func(), totalSum int, b *Board, j, i int) int {
-	b.scanXmas('X', move)
-	if word.accumulator == XMAS {
-		
-		totalSum += 1
-		fmt.Println(totalSum, word.accumulator, i, j)
-	}
+	b.scanXmas(rune(XMAS[0]), move)
 	resetCurWordState(b, j, i)
 	return totalSum
+}
+func tryDirection2(move func(), b *Board, j, i int) bool {
+	b.scanXmas(rune(XMAS[0]), move)
+	// fmt.Println(word.accumulator)
+	if word.accumulator == XMAS {
+		resetCurWordState(b, j, i)
+		return true
+	}
+	resetCurWordState(b, j, i)
+	return false
+
 }
 
 func resetCurWordState(b *Board, j int, i int) {
@@ -161,9 +242,8 @@ func NewBoard(lines []string) *Board {
 
 func (w *Word) Continue(r rune) bool {
 	w.accumulator += string(r)
-	if w.index >= len(w.origin) - 1 {
-		fmt.Printf("error in word %-v\n", w)
-
+	if w.index >= len(w.origin)-1 {
+		// fmt.Printf("error in word %-v\n", w)
 		return false
 	}
 	if rune(w.origin[w.index]) == r {
@@ -173,5 +253,3 @@ func (w *Word) Continue(r rune) bool {
 		return false
 	}
 }
-
-

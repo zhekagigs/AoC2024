@@ -117,6 +117,38 @@ func TestGetAnswer_BorderXMAS(t *testing.T) {
 	}
 }
 
+func TestGetAnswer2(t *testing.T) {
+	lines := []string{
+		"MMMSXXMASM",
+		"MSAMXMSMSA",
+		"AMXSXMAAMM",
+		"MSAMASMSMX",
+		"XMASAMXAMM",
+		"XXAMMXXAMA",
+		"SMSMSASXSS",
+		"SAXAMASAAA",
+		"MAMMMXMMMM",
+		"MXMXAXMASX",
+	}
+	result := getAnswer2(lines)
+	if result != 9 {
+		t.Errorf("Expected 9 for MAS in x shape, got %d", result)
+	}
+}
+
+func TestGetAnswer2_small(t *testing.T) {
+	lines := []string{
+		"MXM",
+		"XAX",
+		"SXS",
+		
+	}
+	result := getAnswer2(lines)
+	if result != 1 {
+		t.Errorf("Expected 1 for MAS in x shape, got %d", result)
+	}
+}
+
 func TestGetAnswer_BorderXMASsmall(t *testing.T) {
 	lines := []string{
 		"MMMSXXMASM",
